@@ -1,6 +1,5 @@
 import React, { useContext, useState } from 'react'
 
-
 import {
   CREATE_EVENT,
   DELETE_ALL_EVENTS,
@@ -50,7 +49,19 @@ const EventForm = () => {
   }
 
   const unCreatable = title === '' || body === ''
-  const unDeletable = state.events.length === 0
+  const unDeletableEvents = state.events.length === 0
+  const unDeletableLogs = state.operationLogs.length === 0
+
+  const deleteAllOperationLogs = e => {
+    e.preventDefault()
+    const result = window.confirm('全ての操作ログを削除していいですか？')
+
+    if (result) {
+      dispatch({
+        type: DELETE_ALL_OPERATION_LOGS,
+      })
+    }
+  }
 
   return (
     <>
@@ -64,7 +75,8 @@ const EventForm = () => {
           <textarea className="form-control" id="formEventBody" value={body} onChange={e => setBody(e.target.value)} />
         </div>
         <button className="btn btn-primary" onClick={addEvent} disabled={unCreatable}>イベントを作成する</button>
-        <button className="btn btn-danger" onClick={deleteAllEvents} disabled={unDeletable}>全てのイベントを削除する</button>
+        <button className="btn btn-danger" onClick={deleteAllEvents} disabled={unDeletableEvents}>全てのイベントを削除する</button>
+        <button className="btn btn-danger" onClick={deleteAllOperationLogs} disabled={unDeletableLogs}>全ての操作ログを削除する</button>
       </form>
 
     </>
